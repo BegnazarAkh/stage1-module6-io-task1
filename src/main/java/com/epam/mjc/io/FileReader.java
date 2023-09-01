@@ -1,43 +1,27 @@
 package com.epam.mjc.io;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.*;
 
 public class FileReader {
+    String line = null;
+    Map<String, String> result = new HashMap<>();
+    String[] array = {};
+    public Profile getDataFromFile(File file) {
 
-    public Profile getDataFromFile(File file) throws IOException {
-        if(!file.exists()){
-            throw new IOException();
-        }
-        Profile profile = new Profile();
-
-        try(BufferedReader reader = new BufferedReader(new java.io.FileReader(file))){
-            String line;
-            while((line = reader.readLine()) != null){
-                String[] parts = line.split(":");
-                if(parts.length == 2){
-                    String key = parts[0].trim();
-                    String value = parts[1].trim();
-
-                    switch(key){
-                        case "Name":
-                            profile.setName(value);
-                            break;
-                        case "Age":
-                            profile.setAge(Integer.parseInt(value));
-                            break;
-                        case "Email":
-                            profile.setEmail(value);
-                            break;
-                        case "Phone":
-                            profile.setPhone(Long.valueOf(value));
-                            break;
-                    }
-                }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))))
+        {
+            while ((line = reader.readLine()) != null) {
+                array = line.split(":");
+                result.put(array[0], array[1]);
             }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return profile;
+
+        return new Profile(result.get("Name").trim(), Integer.parseInt(result.get("Age").trim()), result.get("Email").trim(), Long.parseLong(result.get("Phone").trim()));
     }
+
 }
