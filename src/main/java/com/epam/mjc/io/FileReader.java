@@ -2,7 +2,7 @@ package com.epam.mjc.io;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.*;
+
 
 public class FileReader {
     String line = null;
